@@ -2,8 +2,8 @@
 package main
 
 import (
-	architecture "github.com/capybari/capybari-analyzer-architecture"
-	"github.com/capybari/capybari-core/standalone"
+	architecture "github.com/capybari-repo/capybari-analyzer-architecture"
+	"github.com/capybari-repo/capybari-core/standalone"
 )
 
 var version = "dev"

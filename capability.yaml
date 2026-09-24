@@ -16,7 +16,7 @@ execution:
   network: none
   ai: none
 privacy: Runs entirely locally. Nothing leaves the machine.
-methodology: https://github.com/capybari/capybari-analyzer-architecture/blob/main/docs/methodology.md
+methodology: https://github.com/capybari-repo/capybari-analyzer-architecture/blob/main/docs/methodology.md
 follow_ups:
   - capability: code-health
     reason: Modules in dependency cycles are hard to change safely; check their complexity and duplication.
