@@ -45,6 +45,15 @@ func goImports(src []byte) []rawImport {
 	return out
 }
 
+var typeOnly = regexp.MustCompile(`(?m)^\s*(?:import|export)\s+type\s[^\n]*$`)
+
+// jsImports ignores TypeScript type-only imports, which are erased at
+// compile time and create no runtime dependency.
+func jsImports(src string) []rawImport {
+	src = typeOnly.ReplaceAllStringFunc(src, func(m string) string { return strings.Repeat(" ", len(m)) })
+	return regexImports(jsImport, src, 1)
+}
+
 func regexImports(re *regexp.Regexp, src string, groups ...int) []rawImport {
 	var out []rawImport
 	for _, m := range re.FindAllStringSubmatchIndex(src, -1) {
@@ -61,6 +70,16 @@ func regexImports(re *regexp.Regexp, src string, groups ...int) []rawImport {
 // pyImports expands "from pkg import a, b" into candidate module specs,
 // since "a" may itself be a submodule of pkg.
 func pyImports(src string) []rawImport {
+	// Only module-level imports create load-time dependencies. Indented
+	// imports are either under "if TYPE_CHECKING:" (type-only) or inside
+	// functions (deliberately deferred), so they are blanked out.
+	lines := strings.Split(src, "\n")
+	for i, l := range lines {
+		if strings.HasPrefix(l, " ") || strings.HasPrefix(l, "\t") {
+			lines[i] = ""
+		}
+	}
+	src = strings.Join(lines, "\n")
 	var out []rawImport
 	for _, m := range pyImport.FindAllStringSubmatchIndex(src, -1) {
 		line := lineAt(src, m[0])

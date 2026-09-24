@@ -127,7 +127,7 @@ func (*Analyzer) Analyze(ctx context.Context, in *analyzer.Input) (*analyzer.Res
 			work = append(work, pending{f, "go:" + dir, goImports(src), "go"})
 			g.unitDir["go:"+dir] = dir
 		case "JavaScript", "TypeScript", "Vue", "Svelte":
-			work = append(work, pending{f, "file:" + f.Path, regexImports(jsImport, s, 1), "js"})
+			work = append(work, pending{f, "file:" + f.Path, jsImports(s), "js"})
 			g.unitDir["file:"+f.Path] = dir
 		case "Python":
 			work = append(work, pending{f, "file:" + f.Path, pyImports(s), "py"})
@@ -182,6 +182,12 @@ func (*Analyzer) Analyze(ctx context.Context, in *analyzer.Input) (*analyzer.Res
 				}
 			case "py":
 				if p, ok := pyResolve(w.file.Path, im.spec, exists, pyRoots); ok {
+					// Importing your own package ("from . import x", "from pkg
+					// import y" inside pkg) goes through __init__.py re-exports;
+					// that is Python's normal package pattern, not a cycle.
+					if path.Base(p) == "__init__.py" && strings.HasPrefix(w.file.Path+"/", path.Dir(p)+"/") {
+						continue
+					}
 					to, toDir = "file:"+p, path.Dir(p)
 				}
 			case "java", "cs", "php":
