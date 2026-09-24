@@ -66,7 +66,7 @@ func TestLayersCyclesAndNamespaces(t *testing.T) {
 		"src/models/user.ts":    "import { router } from '../routes/users';\nimport { UserService } from '../services/users';\nexport class User {}\n",
 		// Java packages
 		"java/com/acme/api/Controller.java": "package com.acme.api;\nimport com.acme.data.Repo;\nimport java.util.List;\nclass Controller {}\n",
-		"java/com/acme/data/Repo.java":       "package com.acme.data;\nimport com.acme.api.Controller;\nclass Repo {}\n",
+		"java/com/acme/data/Repo.java":      "package com.acme.data;\nimport com.acme.api.Controller;\nclass Repo {}\n",
 	})
 	r := analyzertest.Run(t, architecture.New(), analyzertest.Repo(t, dir), analyzertest.Options{})
 	arch := analyzertest.Fact[facts.Architecture](t, r, facts.KeyArchitecture)

@@ -59,21 +59,21 @@ func (*Analyzer) Applies(in *analyzer.Input) (bool, string) {
 
 // edge is a resolved internal dependency between units.
 type edge struct {
-	from, to   string // unit IDs
-	file       string // importing file
-	line       int
-	fromDir    string
-	toDir      string
+	from, to string // unit IDs
+	file     string // importing file
+	line     int
+	fromDir  string
+	toDir    string
 }
 
 // graph accumulates units (cycle granularity) and directory nodes.
 type graph struct {
-	edges     []edge
-	unitDir   map[string]string // unit -> directory
-	dirLang   map[string]string
-	dirFiles  map[string]int
-	dirLines  map[string]int
-	external  map[string]int
+	edges    []edge
+	unitDir  map[string]string // unit -> directory
+	dirLang  map[string]string
+	dirFiles map[string]int
+	dirLines map[string]int
+	external map[string]int
 }
 
 // Analyze implements analyzer.Analyzer.
@@ -339,11 +339,11 @@ func (g *graph) analyse() (*facts.Architecture, []finding.Finding) {
 		e := firstEdge[k]
 		violations = append(violations, finding.Finding{
 			Dimension: finding.DimStructure, Category: "layer-violation", Severity: finding.Low, Confidence: finding.ConfidenceMedium,
-			Title:       fmt.Sprintf("%s layer depends on %s layer (%s → %s)", lf, lt, k.from, k.to),
-			Description: fmt.Sprintf("%s (%s) imports %s (%s) %d time(s). Inner layers should not depend on outer ones.", k.from, lf, k.to, lt, weights[k]),
-			Evidence:    []finding.Evidence{{Location: finding.Location{Path: e.file, StartLine: e.line}}},
-			Rule:        &finding.Rule{ID: "layer-violation"},
-			Remediation: &finding.Remediation{Summary: "Move the shared type or logic inward, or pass it in from the outer layer.", Automatable: false},
+			Title:                 fmt.Sprintf("%s layer depends on %s layer (%s → %s)", lf, lt, k.from, k.to),
+			Description:           fmt.Sprintf("%s (%s) imports %s (%s) %d time(s). Inner layers should not depend on outer ones.", k.from, lf, k.to, lt, weights[k]),
+			Evidence:              []finding.Evidence{{Location: finding.Location{Path: e.file, StartLine: e.line}}},
+			Rule:                  &finding.Rule{ID: "layer-violation"},
+			Remediation:           &finding.Remediation{Summary: "Move the shared type or logic inward, or pass it in from the outer layer.", Automatable: false},
 			FalsePositiveGuidance: "Layers are inferred from directory names (routes/controllers/handlers → interface, services/domain → domain, models/db/repositories → data, utils/lib/common → shared). Projects with other conventions may be misclassified.",
 		})
 	}
