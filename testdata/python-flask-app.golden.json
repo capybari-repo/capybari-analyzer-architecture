@@ -1,0 +1,16 @@
+{
+  "architecture": {
+    "nodes": [
+      {
+        "id": "app",
+        "language": "Python",
+        "files": 3,
+        "lines": 46,
+        "layer": "domain"
+      }
+    ],
+    "edges": null,
+    "mermaid": "graph LR\n  n_app[\"app\u003cbr/\u003e3 files\"]"
+  },
+  "findings": null
+}

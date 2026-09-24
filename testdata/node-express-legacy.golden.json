@@ -1,0 +1,59 @@
+{
+  "architecture": {
+    "nodes": [
+      {
+        "id": "src",
+        "language": "JavaScript",
+        "files": 2,
+        "lines": 22
+      },
+      {
+        "id": "src/routes",
+        "language": "JavaScript",
+        "files": 1,
+        "lines": 13,
+        "layer": "interface"
+      },
+      {
+        "id": "src/utils",
+        "language": "JavaScript",
+        "files": 2,
+        "lines": 19,
+        "layer": "shared"
+      }
+    ],
+    "edges": [
+      {
+        "from": "src",
+        "to": "src/routes",
+        "weight": 1
+      },
+      {
+        "from": "src",
+        "to": "src/utils",
+        "weight": 2
+      },
+      {
+        "from": "src/routes",
+        "to": "src",
+        "weight": 1
+      }
+    ],
+    "cycles": [
+      [
+        "src/utils/dates.js",
+        "src/utils/log.js"
+      ]
+    ],
+    "external": [
+      "express",
+      "lodash",
+      "moment",
+      "mysql"
+    ],
+    "mermaid": "graph LR\n  n_src[\"src\u003cbr/\u003e2 files\"]\n  n_src_routes[\"src/routes\u003cbr/\u003e1 files\"]\n  n_src_utils[\"src/utils\u003cbr/\u003e2 files\"]\n  n_src --\u003e|1| n_src_routes\n  n_src --\u003e|2| n_src_utils\n  n_src_routes --\u003e|1| n_src"
+  },
+  "findings": [
+    "low Circular dependency between 2 modules"
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "architecture": {
+    "nodes": [
+      {
+        "id": "cmd/server",
+        "language": "Go",
+        "files": 1,
+        "lines": 14,
+        "layer": "interface"
+      },
+      {
+        "id": "internal/api",
+        "language": "Go",
+        "files": 1,
+        "lines": 23,
+        "layer": "interface"
+      },
+      {
+        "id": "internal/store",
+        "language": "Go",
+        "files": 1,
+        "lines": 26,
+        "layer": "data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "cmd/server",
+        "to": "internal/api",
+        "weight": 1
+      },
+      {
+        "from": "cmd/server",
+        "to": "internal/store",
+        "weight": 1
+      },
+      {
+        "from": "internal/api",
+        "to": "internal/store",
+        "weight": 1
+      }
+    ],
+    "external": [
+      "github.com/gin-gonic/gin"
+    ],
+    "mermaid": "graph LR\n  n_cmd_server[\"cmd/server\u003cbr/\u003e1 files\"]\n  n_internal_api[\"internal/api\u003cbr/\u003e1 files\"]\n  n_internal_store[\"internal/store\u003cbr/\u003e1 files\"]\n  n_cmd_server --\u003e|1| n_internal_api\n  n_cmd_server --\u003e|1| n_internal_store\n  n_internal_api --\u003e|1| n_internal_store"
+  },
+  "findings": null
+}

@@ -1,0 +1,24 @@
+id: architecture
+name: Architecture Mapper
+version: 0.1.0
+category: structure
+summary: Builds the internal module dependency graph from imports (Go, JavaScript/TypeScript, Python, Java/Kotlin, C#, PHP), detects circular dependencies and layering violations, and renders a Mermaid diagram.
+stability: stable
+core_api: v0
+targets: [repository]
+requires: [inventory]
+provides: [architecture]
+findings: [dependency-cycle, layer-violation, high-coupling]
+scores: [structure]
+cost: medium
+execution:
+  local: true
+  network: none
+  ai: none
+privacy: Runs entirely locally. Nothing leaves the machine.
+methodology: https://github.com/capybari/capybari-analyzer-architecture/blob/main/docs/methodology.md
+follow_ups:
+  - capability: code-health
+    reason: Modules in dependency cycles are hard to change safely; check their complexity and duplication.
+    when:
+      finding_categories: [dependency-cycle, high-coupling]
